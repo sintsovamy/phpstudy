@@ -10,8 +10,7 @@ use MyProject\View\View;
 
 class ArticlesController
 {
-    /** @var View*/
-    private $view;
+    private View $view;
 
     public function __construct()
     {
