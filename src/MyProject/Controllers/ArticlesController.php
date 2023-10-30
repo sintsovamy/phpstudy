@@ -19,7 +19,6 @@ class ArticlesController
 
     public function view(int $articleId): void
     {   
-	/* @var Article $article*/ 
         $article = Article::getById($articleId);
 
 	if ($article == null) {
@@ -33,7 +32,6 @@ class ArticlesController
 
     public function edit(int $articleId): void
     {
-	/* @var Article $article*/
         $article = Article::getById($articleId);
 	if ($article == null) {
             throw new NotFoundException();
@@ -48,10 +46,8 @@ class ArticlesController
 
     public function add(): void
     {
-	/* @var User $author */
         $author = User::getById(1);
 
-	/* @var Article $article */
 	$article = new Article();
 	$article->setAuthor($author);
         $article->setName('Новое название статьи');
@@ -64,7 +60,6 @@ class ArticlesController
 
     public function delete(int $articleId): void
     {
-	/* @var Article $article */
         $article = Article::getById($articleId);
 
 	if ($article) {
