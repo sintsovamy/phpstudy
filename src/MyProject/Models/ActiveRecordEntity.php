@@ -74,7 +74,6 @@ abstract class ActiveRecordEntity
         *of comma separated params "param1, param2, ..." */
 	$paramsNamesViaSemicolon = implode(', ', $paramsNames);
 
-	/* @var string $sql*/
 	$sql = 'INSERT INTO ' . static::getTableName() . ' (' . $columnsViaSemicolon . ') VALUES (' . $paramsNamesViaSemicolon . ');';
         
 	$db = Db::getInstance();
