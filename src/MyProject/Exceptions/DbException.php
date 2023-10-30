@@ -19,12 +19,12 @@ class DbException extends \Exception implements Throwable
         $this->file;
     }
 
-    public getLine(): int
+    public function getLine(): int
     {
         $this->line;
     }
 
-    public getTrace(): array
+    public function getTrace(): array
     {
         $this->trace;
     }
