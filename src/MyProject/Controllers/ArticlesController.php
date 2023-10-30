@@ -17,9 +17,6 @@ class ArticlesController
         $this->view = new View(__DIR__ . '/../../../templates');
     }
 
-    /**
-     * @param int $articleId
-     */
     public function view(int $articleId): void
     {   
 	/* @var Article $article*/ 
@@ -34,9 +31,6 @@ class ArticlesController
         ]);
     }
 
-     /**
-     * @param int $articleId
-     */
     public function edit(int $articleId): void
     {
 	/* @var Article $article*/
@@ -52,8 +46,6 @@ class ArticlesController
 
     }
 
-    /**
-     */
     public function add(): void
     {
 	/* @var User $author */
@@ -70,9 +62,6 @@ class ArticlesController
         //var_dump($article);
     }
 
-    /**
-     * @param int $articleId
-     */
     public function delete(int $articleId): void
     {
 	/* @var Article $article */
