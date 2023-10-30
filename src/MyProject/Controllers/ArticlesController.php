@@ -54,8 +54,6 @@ class ArticlesController
 	$article->setText('Новый текст статьи');
 
 	$article->save();
-
-        //var_dump($article);
     }
 
     public function delete(int $articleId): void
