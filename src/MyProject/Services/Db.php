@@ -6,9 +6,8 @@ use MyProject\Exceptions\DbException;
 
 class Db
 {
-    /** @var \PDO */
-    private $pdo;
-    private static $instance;
+    private \PDO $pdo;
+    private static Db $instance;
 
     private function __construct()
     {
@@ -23,9 +22,6 @@ class Db
 	}
     }
                  
-    /**
-     * @return Db
-     */
     public static function getInstance(): self
     {
         if (self::$instance === null) {
@@ -35,10 +31,7 @@ class Db
     }
 
     /**
-     * @param string $sql
-     * @param array $params
-     * @param string $className
-     * @return array
+     * @return array|null
      */
     public function query(string $sql, array $params = [], string $className = 'stdClass'): ?array
     {
@@ -51,9 +44,6 @@ class Db
         return $sth->fetchAll(\PDO::FETCH_CLASS, $className);    
     }
 
-    /**
-     * @return int
-     */
     public function getLastInsertId(): int
     {
         return (int) $this->pdo->lastInsertId();
