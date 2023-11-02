@@ -6,8 +6,9 @@ use MyProject\Services\Db;
 
 abstract class ActiveRecordEntity
 {
-    protected int $id;
-	
+    /** @var int $id */
+    protected $id;
+
     public function getId(): int
     {
         return $this->id;
@@ -23,8 +24,7 @@ abstract class ActiveRecordEntity
     {
         return lcfirst(str_replace('_', '', ucwords($source, '_')));
     }
-	
-    /** returns array of records from static::getTableName() table */
+
     public static function findAll(): array
     {   
         $db = Db::getInstance();
@@ -52,12 +52,12 @@ abstract class ActiveRecordEntity
             $this->insert($mappedProperties);
         }
     }
-	
+    
     /** makes an array of fields for new record */
     public function insert(array $mappedProperties): void
     {
-	/** @var array $filteredProperties 
-        * is $mappedProperties without null fields*/
+	/** @var array $filteredProperties
+￼       * is $mappedProperties without null fields*/
         $filteredProperties = array_filter($mappedProperties);
         $columns = [];
         foreach ($filteredProperties as $columnName => $value) {
@@ -66,12 +66,13 @@ abstract class ActiveRecordEntity
 		$paramsNames[] = $paramName;
 		$params2values[$paramName] = $value;
 	}
-    
-	/** @var string $columnsViaSemicolon
-        *of comma separated columns "colunm1, column2, ..." */
+
+        /** @var string $columnsViaSemicolon
+￼        *of comma separated columns "colunm1, column2, ..." */
 	$columnsViaSemicolon = implode(', ', $columns);
+
 	/** @var string $paramsNamesViaSemicolon
-        *of comma separated params "param1, param2, ..." */
+￼        *of comma separated params "param1, param2, ..." */
 	$paramsNamesViaSemicolon = implode(', ', $paramsNames);
 
 	$sql = 'INSERT INTO ' . static::getTableName() . ' (' . $columnsViaSemicolon . ') VALUES (' . $paramsNamesViaSemicolon . ');';
@@ -82,11 +83,6 @@ abstract class ActiveRecordEntity
 
     }
 
-
-    /**
-     * array $columns2params of string "column1 = :param1"
-     * array $params2values of string "[:param1 => value1]"
-     */
     private function update(array $mappedProperties): void
     {
 	$columns2params = [];
@@ -94,8 +90,6 @@ abstract class ActiveRecordEntity
 	/** @var int $index */
         $index = 1;
 	foreach ($mappedProperties as $column => $value) {
-	    /* @var string $param
-            * of ":param1" */
             $param = ':param' . $index; // :param1
             $columns2params[] = $column . ' = ' . $param; // column1 = :param1
             $params2values[$param] = $value; // [:param1 => value1]
@@ -111,11 +105,10 @@ abstract class ActiveRecordEntity
     private function mapPropertiesToDbFormat(): array
     {
 	$reflector = new \ReflectionObject($this);
-        /** @var array $properties of string */
 	$properties = $reflector->getProperties();
 
-        /* @var array $mappedProperties of string 
-	* properties in camelCaseToUnderscore view*/
+	/* @var array $mappedProperties of string
+￼	* properties in camelCaseToUnderscore view*/
 	$mappedProperties = [];
 	foreach ($properties as $property) {
 	    $propertyName = $property->getName();
@@ -137,9 +130,22 @@ abstract class ActiveRecordEntity
 
     abstract protected static function getTableName(): string;
 
-  
     private function camelCaseToUnderscore(string $source): string
     {
         return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $source));
+    }
+
+    public static function findOneByColumn(string $columnName, string $value): ?self
+    {
+    $db = Db::getInstance();
+    $result = $db->query(
+        'SELECT * FROM ' . static::getTableName() . ' WHERE ' . $columnName . ' = :value LIMIT 1;',
+        [':value' => $value],
+        static::class
+    );
+    if ($result === []) {
+        return null;
+    }
+    return $result[0];
     }
 }

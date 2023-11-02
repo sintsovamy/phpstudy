@@ -6,24 +6,17 @@ use MyProject\View\View;
 use MyProject\Services\Db;
 use MyProject\Models\Articles\Article;
 use MyProject\Exceptions\DbException;
+use MyProject\Models\Users\User;
+use MyProject\Models\Users\UsersAuthService;
 
-
-class MainController
+class MainController extends AbstractController
 {
-    private View $view;
-    private Db $db;
-
-    public function __construct()
-        {
-		$this->view = new View(__DIR__ . '/../../../templates');
-		$this->db = Db::getInstance();
-        }
-
     public function main(string $title = 'Главная страница'): void
     {
         $articles = Article::findAll();
-        $this->view->renderHtml('main/main.php', ['articles' => $articles, 'title' => $title]);
-        }
+	$this->view->renderHtml('main/main.php', ['articles' => $articles]);
+    }
+
 
     public function sayHello(string $name, string $title = 'Страница приветствия'): void
         {
