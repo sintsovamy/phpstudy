@@ -7,16 +7,17 @@ use MyProject\Exceptions\DbException;
 class Db
 {
     private \PDO $pdo;
-    private static Db $instance;
+    private static $instance;
 
     private function __construct()
     {
-
         $dbOptions = (require __DIR__ . '/../../settings.php')['db'];
+	$host = $dbOptions['host'];
+	$dbname = $dbOptions['dbname'];
 
 	try {
-                $this->pdo = new \PDO(
-                'pgsql:host=' . $dbOptions['host'] . ';dbname=' . $dbOptions['dbname'], $dbOptions['user'], $dbOptions['password']);
+		$this->pdo = new \PDO(
+			'pgsql:host=' . $dbOptions['host'] . ';dbname=' . $dbOptions['dbname'], $dbOptions['user'], $dbOptions['password']);
 	} catch (\PDOException $e) {
             throw new DbException('Ошибка при подключении к базе данных');
 	}
@@ -30,9 +31,6 @@ class Db
 	return self::$instance;
     }
 
-    /**
-     * @return array|null
-     */
     public function query(string $sql, array $params = [], string $className = 'stdClass'): ?array
     {
         $sth = $this->pdo->prepare($sql);
